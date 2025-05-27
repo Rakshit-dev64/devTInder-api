@@ -3,22 +3,23 @@ const {adminAuth, userAuth} = require("./middlewares/auth")
 
 const app = express();
 
-app.use("/admin", adminAuth);
-
-app.get("/user",userAuth,(req,res)=>{
-    res.send("User Looged in");
+app.use("/user",(req, res, next)=>{
+    //best practice is to always use try catch
+    // try{
+        throw new Error("error");
+        res.send("User Logged In");
+    // }
+    // catch(err){
+        // res.send("Soemthing went wrong");
+    // }
+    
 })
 
-app.get("/admin/getAllData",(req,res,next)=>{
-        res.send("All Data Sent");
-    }
-)
-app.get("/admin/deleteUser",(req,res,next)=>{
-        res.send("Deleted User");
-    }
-)
-
-
+app.use("/",(err, req, res, next)=>{
+    if(err){
+        res.status(500).send("Something went wrong");
+    }  
+})
 app.listen(3000, () => {
   console.log("Server started");
 });
