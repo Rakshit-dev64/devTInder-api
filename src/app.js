@@ -53,9 +53,10 @@ app.get("/user/id",async(req,res)=>{
 })
 
 // delete a user from database
-app.delete("/user", async(req,res)=>{
+app.delete("/user/:userId", async(req,res)=>{
     try{
-        const user = await User.findByIdAndDelete(req.body._id);
+        const userId = req.params?.userId
+        const user = await User.findByIdAndDelete(userId);
         res.send("User Deleted Successfully");
     }catch(err){
         res.status(404).send("Something went wrong");
@@ -63,12 +64,21 @@ app.delete("/user", async(req,res)=>{
 })
 
 // update an user || patch API
-app.patch("/user",async(req,res)=>{
+app.patch("/user/:userId",async(req,res)=>{
     const data = req.body;
+    const userId = req.params?.userId;
     try{
+        const ALLOWED_UPDATES = ["password", "about", "gender", "profileURL", "skills",];
+        const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATES.includes(k));
+        if(!isUpdateAllowed){
+            throw new Error("Update not allowed");
+        }
+        if(data?.skills.length > 10){
+            throw new Error("Can't add more than 10 skills");
+        }
         // hard coded bad way
         // const user = await User.findByIdAndUpdate(req.body._id, {firstName : "Shiratori",lastName : "Kazuma"});
-        const user = await User.findByIdAndUpdate(req.body._id,data,{ runValidators : true } );
+        const user = await User.findByIdAndUpdate(userId,data,{ runValidators : true } );
         console.log(user);
         res.send("User Updated");
 
