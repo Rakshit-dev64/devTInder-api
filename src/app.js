@@ -3,11 +3,14 @@ const bcrypt = require("bcrypt");
 const connectDB = require("./config/database");
 const User = require("./models/user");
 const {validateSignupData, validateLoginData} = require("./utils/validation");
-
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const {userAuth} = require("./middlewares/auth")
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 //add user
 app.post("/signup",async(req,res)=>{
@@ -40,6 +43,10 @@ app.post("/login", async(req,res)=>{
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(isPasswordValid){
+            // create a jwt token
+            const token = await jwt.sign({_id : user._id}, "SecretKey@998");
+            // add the token to cookie and send response back to the user
+            res.cookie("token",token);
             res.send("Logged in successfully");
         }
         else{
@@ -50,75 +57,14 @@ app.post("/login", async(req,res)=>{
 
     }
 })
-// get user by emailId
-app.get("/user/email",async (req,res)=>{
-    try{
-        const user = await User.find({ emailId : req.body.emailId});
-        if(user.length === 0){
-            res.send("User not found");
-        }
-        else{
-            res.send(user);
-        }
-    }catch(err){
-        res.status(404).send("Something went wrong");
-    }
-})
 
-// show all user || Feed API
-app.get("/feed",async(req,res)=>{
+// get profile api
+app.get("/profile",userAuth,async(req,res)=>{
     try{
-        const users = await User.find({});
-        res.send(users);
-    }catch(err){
-        res.status(404).send("Something went wrong")
-    }
-
-})
-
-// find user by id (mongoDB id)
-app.get("/user/id",async(req,res)=>{
-    try{
-        const user = await User.findById(req.body._id);
+        const user = req.user;
         res.send(user);
     }catch(err){
-        res.status(400).send("Something went wrong");
-    }
-})
-
-// delete a user from database
-app.delete("/user/:userId", async(req,res)=>{
-    try{
-        const userId = req.params?.userId
-        const user = await User.findByIdAndDelete(userId);
-        res.send("User Deleted Successfully");
-    }catch(err){
-        res.status(404).send("Something went wrong");
-    }
-})
-
-// update an user || patch API
-app.patch("/user/:userId",async(req,res)=>{
-    const data = req.body;
-    const userId = req.params?.userId;
-    try{
-        const ALLOWED_UPDATES = ["password", "about", "gender", "profileURL", "skills",];
-        const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATES.includes(k));
-        if(!isUpdateAllowed){
-            throw new Error("Update not allowed");
-        }
-        if(data?.skills.length > 10){
-            throw new Error("Can't add more than 10 skills");
-        }
-        // hard coded bad way
-        // const user = await User.findByIdAndUpdate(req.body._id, {firstName : "Shiratori",lastName : "Kazuma"});
-        const user = await User.findByIdAndUpdate(userId,data,{ runValidators : true } );
-        console.log(user);
-        res.send("User Updated");
-
-    }catch(err){
-        res.status(400).send("UPDATE FAILED :" + err.message);
-
+        res.status(404).send(err.message);
     }
 })
 
