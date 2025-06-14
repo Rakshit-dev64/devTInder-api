@@ -6,7 +6,8 @@ const userSchema = mongoose.Schema({
         type : String,
         required : true,
         minLength : 3,
-        maxLength : 15
+        maxLength : 15,
+        // index: true // for enabling indexing on this field
     },
     lastName : {
         type : String,
@@ -35,6 +36,10 @@ const userSchema = mongoose.Schema({
     gender : {
         type : String,
         lowercase : true,
+        enum : {
+            values : ["male", "female", "others"],
+            message : `{VALUE} is not a valid gender type`, 
+        }
         //moved to validation file
         // validate(value){
         //     if(!["male", "female", "others"].includes(value)){
@@ -62,6 +67,9 @@ const userSchema = mongoose.Schema({
 {
     timestamps : true
 }) 
+// indexing
+// userSchema.index({firstName : 1});
+// userSchema.index({gender : 1})
 
 // const User = mongoose.model("User", userSchema);
 // module.exports = User;
