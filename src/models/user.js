@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
+
 const userSchema = mongoose.Schema({
     firstName : {
         type : String,
@@ -49,7 +50,7 @@ const userSchema = mongoose.Schema({
     },
     profileURL : {
         type : String,
-        default : "https://i.pinimg.com/236x/a3/09/ed/a309ed3530e0f365781d8c2607ac4e7e.jpg",
+        default : "https://cdn.getmerlin.in/cms/pfp3_d7855f9562.webp",
         validate(value){
             if(!validator.isURL(value)){
                 throw new Error("Not a valid URL");
@@ -58,7 +59,8 @@ const userSchema = mongoose.Schema({
     },
     about : {
         type : String,
-        default : "Responsible Citizen of The Suplex City"
+        default : "Responsible Citizen of The Suplex City",
+        maxLength : 250
     },
     skills : {
         type : [String]

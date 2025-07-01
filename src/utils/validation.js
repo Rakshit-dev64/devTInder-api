@@ -5,9 +5,10 @@ const validateSignupData = (req) => {
     throw new Error("Invalid Email address");
   } else if (!validator.isStrongPassword(password)) {
     throw new Error("Weak Password");
-  } else if (!["male", "female", "others"].includes(gender)) {
-    throw new Error("Gender Data is not valid");
-  }
+  } 
+  // else if (!["male", "female", "others"].includes(gender)) {
+  //   throw new Error("Gender Data is not valid");
+  // }
 };
 const validateLoginData = (req) => {
   const { emailId, password } = req.body;
@@ -25,7 +26,7 @@ const validateEditProfileData = (req) => {
     "about",
     "password",
     "gender",
-    "photoUrl",
+    "profileURL",
     "age",
     "skills",
   ];
