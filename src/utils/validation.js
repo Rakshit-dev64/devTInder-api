@@ -33,6 +33,7 @@ const validateEditProfileData = (req) => {
   const isEditAllowed = Object.keys(req.body).every((field) =>
     allowedEditFields.includes(field)
   );
+  if(req.body.age < 16) throw new Error("Age should be greater than 16")
   return isEditAllowed;
 };
 module.exports = {

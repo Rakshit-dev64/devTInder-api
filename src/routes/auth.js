@@ -1,4 +1,6 @@
 const express = require("express");
+require("dotenv").config();
+const JWT_SECRET = process.env.JWT_SECRET;
 const {
   validateSignupData,
   validateLoginData,
@@ -42,14 +44,14 @@ authRouter.post("/signup", async (req, res) => {
       password: passwordHash,
     });
     const signedUser = await user.save();
-    const token = await jwt.sign({ _id: signedUser._id }, "SecretKey@998", {
+    const token = await jwt.sign({ _id: signedUser._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
     res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000) });
 
     res.json({message : "User added successfully", data : signedUser});
   } catch (err) {
-    res.status(400).send("Error saving the user :" + err.message);
+    res.status(400).send(err.message);
   }
 });
 
@@ -65,7 +67,7 @@ authRouter.post("/login", async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid) {
       // create a jwt token
-      const token = await jwt.sign({ _id: user._id }, "SecretKey@998", {
+      const token = await jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
       // add the token to cookie and send response back to the user
