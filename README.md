@@ -34,9 +34,9 @@ A Tinder-style networking platform for developers, built with the MERN stack. Us
 
 🏗️ Installation & Setup
 Clone the repository:
-<pre> git clone https://github.com/Rakshit-dev64/devTinder-web.git </pre>
+<pre> git clone https://github.com/Rakshit-dev64/devTinder-api.git </pre>
 Navigate to the project directory:
-<pre> cd devTinder-web </pre>
+<pre> cd devTinder-api </pre>
 Install dependencies:
 <pre> npm install </pre>
 Start the development server:
