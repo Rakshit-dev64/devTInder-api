@@ -19,11 +19,6 @@ const userSchema = mongoose.Schema({
         unique : true,
         trim : true,
         lowercase : true,
-        // validate(value){
-        //     if(!validator.isEmail(value)){
-        //         throw new Error("Invalid Email address");
-        //     }
-        // }
     },
     password : {
         type : String,
@@ -41,12 +36,6 @@ const userSchema = mongoose.Schema({
             values : ["male", "female", "others"],
             message : `{VALUE} is not a valid gender type`, 
         }
-        //moved to validation file
-        // validate(value){
-        //     if(!["male", "female", "others"].includes(value)){
-        //         throw new Error("Gender data is not Valid");
-        //     }
-        // }
     },
     profileURL : {
         type : String,
