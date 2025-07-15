@@ -10,7 +10,10 @@ const http = require("http");
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin : ["http://localhost:5173","http://localhost:5174","https://devtinder-web-xiqj.onrender.com"],
+    origin : [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://devtinder-web-xiqj.onrender.com"],
     credentials : true
 }
 ));

@@ -47,7 +47,12 @@ authRouter.post("/signup", async (req, res) => {
     const token = await jwt.sign({ _id: signedUser._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000) });
+    res.cookie("token", token, { 
+      expires: new Date(Date.now() + 8 * 3600000),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    });
 
     res.json({message : "User added successfully", data : signedUser});
   } catch (err) {
@@ -73,6 +78,9 @@ authRouter.post("/login", async (req, res) => {
       // add the token to cookie and send response back to the user
       res.cookie("token", token, {
         expires: new Date(Date.now() + 8 * 3600000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
       });
       res.send(user);
     } else {
@@ -85,7 +93,12 @@ authRouter.post("/login", async (req, res) => {
 
 // logout api
 authRouter.post("/logout", async (req, res) => {
-  res.cookie("token", null, { expires: new Date(Date.now()) });
+  res.cookie("token", null, { 
+    expires: new Date(Date.now()),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  });
   res.send("User Logged Out");
 });
 
