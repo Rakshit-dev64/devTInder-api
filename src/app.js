@@ -7,7 +7,7 @@ require("dotenv").config();
 const PORT = process.env.PORT;
 const http = require("http");
 
-// CORS configuration 
+// CORS configuration for incognito mode compatibility
 const corsOptions = {
     origin: [
         "http://localhost:5173",
@@ -15,7 +15,7 @@ const corsOptions = {
         "https://devtinder-web-xiqj.onrender.com"
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
         "Content-Type", 
         "Authorization", 
@@ -25,20 +25,11 @@ const corsOptions = {
         "Origin"
     ],
     exposedHeaders: ["Set-Cookie"],
-    optionsSuccessStatus: 200, // For older browsers
+    optionsSuccessStatus: 200,
     preflightContinue: false
 };
 
-// Apply CORS before other middleware
 app.use(cors(corsOptions));
-
-// Additional middleware for incognito mode compatibility
-app.use((req, res, next) => {
-    // Set additional headers for incognito mode
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
-    next();
-});
 
 app.use(express.json());
 app.use(cookieParser());
