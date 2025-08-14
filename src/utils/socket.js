@@ -15,7 +15,8 @@ const initializeSocket = (server) => {
       origin: [
         "http://localhost:5173",
         "http://localhost:5174",
-        "https://devtinder-web-xiqj.onrender.com"
+        "https://devtinder-web-xiqj.onrender.com",
+        "dev-tinder-qki9ir555-rakshits-projects-c717fb9d.vercel.app"
       ],
       credentials: true,
       methods: ["GET", "POST"]
