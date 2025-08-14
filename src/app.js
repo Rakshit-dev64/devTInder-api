@@ -13,7 +13,7 @@ const corsOptions = {
         "http://localhost:5173",
         "http://localhost:5174",
         "https://devtinder-web-xiqj.onrender.com",
-        "dev-tinder-qki9ir555-rakshits-projects-c717fb9d.vercel.app"
+        "https://dev-tinder-web-rho.vercel.app"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
